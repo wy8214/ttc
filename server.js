@@ -23,7 +23,6 @@ truffle_connect.contract_instance = new web3.eth.Contract(JSON.parse(interface),
 truffle_connect.contract_address = contract_address
 truffle_connect.contract_creator = ""
 
-
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
