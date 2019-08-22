@@ -31,6 +31,28 @@ module.exports = {
   
   },
 
+  //获取账户余额
+  getBalance:function(account,callback) {
+        var self = this;
+
+        let fun = async () => {
+        try {
+
+                let res = await  self.contract_instance.methods.balanceOf(account).call({
+                    from: self.contract_creator,
+                })
+             
+                console.log('v1:', res)
+                
+                callback(res);
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        fun()
+    },
+
   //获取订单数量
   getOrderCount:function(callback) {
         var self = this;
@@ -112,28 +134,7 @@ module.exports = {
         fun()
     },  
 
-    //获取转账数量
-    getTradeCount:function(callback) {
-        var self = this;
-        
-
-        let fun = async () => {
-        try {
-
-                let res = await  self.contract_instance.methods.getTradeCount().call({
-                    from: self.contract_creator,
-                })
-             
-                console.log('v1:', res)
-                
-                callback(res);
-            } catch (e) {
-                console.log(e)
-            }
-        }
-
-        fun()
-    },
+   
 
 
     //提交转账
@@ -192,50 +193,23 @@ module.exports = {
         fun()
     },
     
+    //账号间转账
+    transfer:function ( to , amount , trade_no, callback) {
 
-
-
-
-    //获取区块金额
-    getBalance:function(account,callback) {
-        var self = this;
-        
+         var self = this;
 
         let fun = async () => {
         try {
 
                 let accounts = await self.web3.eth.getAccounts()
                 console.log('accounts :', accounts)
-                let account = accounts[0]
-                let res = await  self.web3.eth.getBalance(self.contract_creator,6135079)
-                console.log('v1:', res)
-                
-                callback(res);
-            } catch (e) {
-                console.log(e)
-            }
-        }
-
-        fun()
-    },
-
-
-    
-
-
-    //获取合约余额
-    getContractBalance:function(callback) {
-        var self = this;
-       
-
-        let fun = async () => {
-        try {
-              
-                let res = await self.contract_instance.methods.getBalance().call({
-                    from: self.contract_creator,
+                let from = accounts[0]
+                let res = await self.contract_instance.methods.transfer(to,amount,trade_no).call({
+                    gas: '6000000',
+                    value: amount,
                 })
                 console.log('v1:', res)
-                
+
                 callback(res);
             } catch (e) {
                 console.log(e)
@@ -243,46 +217,6 @@ module.exports = {
         }
 
         fun()
-    },
-
-
-    
-
-    //获取区块信息
-    getBlockInfo:function (block_num,callback) {
-
-        var self = this;
-        self.web3.eth.getBlock(block_num, function(error, result){
-            if(!error)
-                console.log(JSON.stringify("no error", result));
-            else
-                console.error("error", error);
-        })
-
-    },
-
-    
-
-    //账号间转账
-    sendTransaction:function (from , to , amount , callback) {
-
-        var self = this;
-        
-        amount = self.web3.utils.toWei(amount, 'ether')
-        var meta;
-        contract_instance.deployed().then(function(value) {
-            return self.web3.eth.sendTransaction({
-                from: from, //如果不指定from，那么会使⽤默认账户defaultAccount的值
-                to: to,
-                gas: '6000000',
-                value: amount,
-            });
-        }).then(function(value) {
-            callback(value.valueOf());
-        }).catch(function(e) {
-            console.log(e);
-            callback("Error 404");
-        });
 
     },  
 

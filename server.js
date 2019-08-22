@@ -10,6 +10,7 @@ const truffle_connect = require('./api/ttc.js');
 
 const config = require('./config/app_config.js');
 
+
 const terms = config.terms;
 const netIp = config.netIp;
 const interface = config.interface;
@@ -37,9 +38,6 @@ app.use((req, res,next) => {
 
   next()
 });
-
-
-
 
 app.get('/getAccounts', (req, res) => {
   console.log("**** GET /getAccounts ****");
@@ -73,16 +71,7 @@ app.get('/getOrder', (req, res) => {
   });
 });
 
-app.get('/getOrderCount', (req, res) => {
-  console.log("**** GET /getOrderCount ****");
-  let params = url.parse(req.url, true).query;
 
-  truffle_connect.getOrderCount((answer) => {
-    
-      res.send(answer);
-    
-  });
-});
 
 
 app.get('/postTrade', (req, res) => {
@@ -92,7 +81,7 @@ app.get('/postTrade', (req, res) => {
   let trade_no = params.trade_no;
   let account = params.account;
 
-  truffle_connect.postOrder(amount,order_sn, account,(answer) => {
+  truffle_connect.transfer(amount, account,trade_no,(answer) => {
       res.send(answer);
   });
 });
@@ -109,18 +98,6 @@ app.get('/getTrade', (req, res) => {
   });
 });
 
-app.get('/getTradeCount', (req, res) => {
-  console.log("**** GET /getTradeCount ****");
-  let params = url.parse(req.url, true).query;
-
-  truffle_connect.getTradeCount((answer) => {
-    
-      res.send(answer);
-    
-  });
-});
-
-
 
 app.get('/getBalance', (req, res) => {
   console.log("**** GET /getBalance ****");
@@ -133,8 +110,6 @@ app.get('/getBalance', (req, res) => {
     
   });
 });
-
-
 
 
 app.listen(port, () => {
