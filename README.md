@@ -7,3 +7,6 @@
 
 ## QTTC 代码合约地址
 https://ropsten.etherscan.io/token/0x62912b53d3125a2d686bf93e64e3061a6d21d940
+
+## API
+web3 通过 truffle-hdwallet-provider 调用合约信息，发布API和订单系统对接
